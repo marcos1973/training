@@ -1,0 +1,23 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Images
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;;myAccountAddressBookPagePreviewImage-144x90;image/png;myAccountAddressBookPagePreviewImage-144x90.png;jar:/cmsData/images/myAccountAddressBookPagePreviewImage-144x90.png;
+
+# Create page
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];label;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code);previewImage(code,$contentCV)
+;;my_account_address_book_page;My account address book page;My account address book page;my_account_address_book_page;my_account_page_template;true;approved;myAccountAddressBookPagePreviewImage-144x90
+
+# Not setting a 'main' content slot
+
+# The standard page template names/positions/keys
+# cartsummary
+# navigation
+# main
+# banner
+# footer
+

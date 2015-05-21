@@ -1,0 +1,8 @@
+$productCatalog=Default
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,virtual=true,default=$productCatalog:Staged]
+$allowedPrincipals=allowedPrincipals(uid)[virtual=true,default='customergroup']
+
+INSERT_UPDATE Category;code[unique=true];name[lang=en];supercategories(code,$catalogVersion);$catalogVersion;$allowedPrincipals;
+;parent1;Parent category 1;
+;cat1;Category 1;parent1;
+;cat2;Category 2;parent1;

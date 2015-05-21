@@ -1,0 +1,34 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Images
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;;homePagePreviewImage-144x90;image/png;homePagePreviewImage-144x90.png;jar:/cmsData/images/homePagePreviewImage-144x90.png;
+
+# Create home page
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];label;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code);previewImage(code,$contentCV)
+;;home_page;Home page;Home page;home_page;standard_page_template;true;approved;homePagePreviewImage-144x90
+
+# Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV);
+;;home_page_main_CS;Home Page 'main' Slot;true;home_page_paragraph1;
+
+# Bind Content Slot to Content Page
+INSERT_UPDATE ContentSlotForPage;uid[unique=true];$contentCV[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true];
+;home_page_main_CSFP;;main;home_page;home_page_main_CS;
+
+
+# Home-page only - update the CMS Site object to set its starting page to the home_page created here.
+UPDATE CMSSite;uid[unique=true];startingPage(uid,$contentCV)
+;frameitsite;home_page;
+
+# The standard page template names/positions/keys
+# cartsummary
+# navigation
+# main
+# banner
+# footer
+

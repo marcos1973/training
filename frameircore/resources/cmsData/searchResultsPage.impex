@@ -1,0 +1,19 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Images
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;;searchResultsPagePreviewImage-144x90;image/png;searchResultsPagePreviewImage-144x90.png;jar:/cmsData/images/searchResultsPagePreviewImage-144x90.png;
+
+# Create search results page
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];label;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code);previewImage(code,$contentCV)
+;;search_results_page;Search Results page;Search Results page;search_results_page;search_results_page_template;true;approved;searchResultsPagePreviewImage-144x90
+
+# The search result page template names/positions/keys
+# cartsummary
+# banner
+# footer
+

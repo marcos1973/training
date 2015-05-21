@@ -1,5 +1,5 @@
 
-package com.cdyne.ws.weatherws;
+package net.webservicex;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetCityForecastByZIPResult" type="{http://ws.cdyne.com/WeatherWS/}ForecastReturn" minOccurs="0"/>
+ *         &lt;element name="GetQuoteResult" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,38 +27,38 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD).///
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getCityForecastByZIPResult"
+    "getQuoteResult"
 })
-@XmlRootElement(name = "GetCityForecastByZIPResponse")
-public class GetCityForecastByZIPResponse {
+@XmlRootElement(name = "GetQuoteResponse")
+public class GetQuoteResponse {
 
-    @XmlElement(name = "GetCityForecastByZIPResult")
-    protected ForecastReturn getCityForecastByZIPResult;
+    @XmlElement(name = "GetQuoteResult")
+    protected String getQuoteResult;
 
     /**
-     * Gets the value of the getCityForecastByZIPResult property.
+     * Gets the value of the getQuoteResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ForecastReturn }
+     *     {@link String }
      *     
      */
-    public ForecastReturn getGetCityForecastByZIPResult() {
-        return getCityForecastByZIPResult;
+    public String getGetQuoteResult() {
+        return getQuoteResult;
     }
 
     /**
-     * Sets the value of the getCityForecastByZIPResult property.
+     * Sets the value of the getQuoteResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ForecastReturn }
+     *     {@link String }
      *     
      */
-    public void setGetCityForecastByZIPResult(ForecastReturn value) {
-        this.getCityForecastByZIPResult = value;
+    public void setGetQuoteResult(String value) {
+        this.getQuoteResult = value;
     }
 
 }

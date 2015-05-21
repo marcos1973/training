@@ -1,0 +1,58 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Page Templates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;active;velocityTemplate;frontendTemplateName
+;;checkout_page_template;Checkout Page Template;true;"<div>
+    <table width=""100%"" cellspacing=""0"" style=""margin:0;padding:0;table-layout:fixed;border:none;"">
+        <tbody>
+            <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""cartsummary""/>
+                </td>
+            </tr>
+            <tr>
+                <td width=""69%"" class=""structureViewSection"">
+                   <cockpit code=""main""/>
+                </td>
+                <td width=""29%"" class=""structureViewSection"">
+                   <cockpit code=""side_panel""/>
+                </td>
+             </tr>
+             <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""footer""/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style=""width:100%; border-top: 2px solid #bbb"" class=""cmsContentEditor"">
+        <cockpit code=""editor""/>
+    </div>
+</div>";checkoutPageTemplate;
+
+
+# Content Slot Names
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true];
+# The checkout page template names/positions/keys
+;cartsummary;checkout_page_template;
+;side_panel;checkout_page_template;
+;footer;checkout_page_template;
+
+# Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV);
+# Cart side panel
+;;checkout_page_template_side_panel_CS;Checkout Page Template 'side_panel' Slot;true;cart_side_panel1;
+# Footer
+;;checkout_page_template_footer_CS;Checkout Page Template 'footer' Slot;true;navigation_link1,navigation_link2,navigation_link3,navigation_link4;
+
+
+# Bind Content Slots to Page Templates
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true];allowOverwrite;
+# Cart side panel
+;checkout_page_template_side_panel_CSFP;;side_panel;checkout_page_template;checkout_page_template_side_panel_CS;true;
+# Footer
+;checkout_page_template_footer_CSFP;;footer;checkout_page_template;checkout_page_template_footer_CS;true;

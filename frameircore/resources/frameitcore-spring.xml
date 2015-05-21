@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+	<!--
+	The hybris platform provides one single Spring application context for beans located at the jalo layer.
+	Each extension can add beans to this context by specifying them at this configuration file.
+	 
+	You can use and/or redefine beans defined at configuration files of other extensions as well as
+	adding new one.
+		
+	If you want to locate this file at a different location or want to use several files for better,
+	structuring, please use the '<yourextension>.application-context' property at your project.properties file.
+	There you can specify a comma separated list of files where first is tried to find a file per classpath and
+	then per file system.
+	
+	Please be aware of the special 'tenant' scope. If you have a multi tenant system you mostly have to use this
+	scope instead of the default Spring 'singleton' scope.
+	
+	If you want to configure beans for your web module please have a look at
+	your web/webroot/WEB-INF/<extname>-web-spring.xml.
+	-->
+	
+	<bean id="pictureFrameService" class="com.philos.frameit.services.impl.PictureFrameServiceImpl">
+		<property name="modelService" ref="modelService"/>
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+	
+	<bean id="dimensionsAttributeHandler" class="com.philos.frameit.attributehandlers.DimensionsAttributeHandler" />
+	<bean id="displayAreaAttributeHandler" class="com.philos.frameit.attributehandlers.DisplayAreaAttributeHandler" />
+
+	<bean id="syncJobService" class="com.philos.frameit.services.impl.DefaultSyncJobService"/>
+	<bean id="solrIndexerService" class="com.philos.frameit.services.impl.DefaultSolrIndexerService">
+		<property name="modelService" ref="modelService" />
+		<property name="cronJobService" ref="cronJobService" />
+	</bean>
+	
+	<bean id="frameitCoreSystemSetup" class="com.philos.frameit.systemsetup.FrameitCoreSystemSetup">
+		<property name="importService" ref="importService" />
+		<property name="syncJobService" ref="syncJobService" />
+		<property name="solrIndexerService" ref="solrIndexerService" />
+	</bean>
+	
+	<!-- Overriding this to add the missing tenant service - hybris will probably correct this in the next release -->	
+	<bean id="solrConfigConversionEventListener" class="de.hybris.platform.solrfacetsearch.events.SolrConfigConversionEventListener">
+		<lookup-method name="getSolrConfigurationConverter" bean="solrConfigurationConverter"/>
+		<lookup-method name="getFacetSearchConfigDao" bean="facetSearchConfigDao"/>
+		<lookup-method name="getModelService" bean="modelService"/>
+		<property name="tenantService" ref="tenantService"/>
+		<property name="clusterService" ref="clusterService"/>
+	</bean>
+
+	<!-- Some event and workflow stuff -->
+	<bean id="newCustomerReviewEventListener" class="com.philos.frameit.event.listeners.NewCustomerReviewEventListener">
+		<property name="tenantService" ref="tenantService"/>
+		<property name="clusterService" ref="clusterService"/>
+		<!-- This is a bit peculiar -  there is an old workflow service that is deprecated but has kept the bean ID 'workflowService'  -->
+		<!-- but if we use that, we get spring conversion errors starting the server. We must use this 'newestWorkflowService' bean ID -->
+		<property name="workflowService" ref="newestWorkflowService"/>
+		<property name="workflowTemplateService" ref="workflowTemplateService"/>
+		<property name="workflowProcessingService" ref="workflowProcessingService"/>
+		<property name="modelService" ref="modelService"/>
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+	<bean id="flaggedAsInappropriateCustomerReviewEventListener" class="com.philos.frameit.event.listeners.FlaggedAsInappropriateCustomerReviewEventListener">
+		<property name="tenantService" ref="tenantService"/>
+		<property name="clusterService" ref="clusterService"/>
+	</bean>
+	
+	<bean id="approveReviewActionJob" class="com.philos.frameit.workflow.actions.ApproveReviewActionJob">
+		<property name="modelService" ref="modelService"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="emailTemplateService" ref="emailTemplateService"/>
+		<property name="velocityService" ref="velocityService"/>
+	</bean>
+	
+	<bean id="rejectReviewActionJob" class="com.philos.frameit.workflow.actions.RejectReviewActionJob">
+		<property name="modelService" ref="modelService"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="emailTemplateService" ref="emailTemplateService"/>
+		<property name="velocityService" ref="velocityService"/>
+	</bean>
+	
+	<bean id="emailTemplateService" class="com.philos.frameit.services.impl.EmailTemplateServiceImpl">
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+	
+	<bean id="mailService" class="com.philos.frameit.services.impl.MailServiceImpl"/>
+	
+	<bean id="velocityService" class="com.philos.frameit.services.impl.VelocityServiceImpl"/>
+
+	<!-- Job performables - used with cronjobs -->
+	<bean id="processIncomingOrderUpdatesJob" class="com.philos.frameit.jobs.ProcessIncomingOrderUpdatesJobPerformable" parent="abstractJobPerformable" />	
+	
+	<!--  Example how to override a manager -->
+	<!--
+	<bean id="core.productManager"   class="com.philos.frameit.jalo.FrameitcoreProductManager" 	init-method="init"	destroy-method="destroy" />
+	-->
+	
+	
+ 	<!--  Example how to configure the class to use for jalo session creation -->
+	<!--
+	<bean id="jalosession"   class="de.hybris.platform.jalo.JaloSessionFactory">
+		<property name="targetClassName" value="com.philos.frameit.jalo.FrameitcoreJaloSession"/>
+	</bean>
+	-->
+
+	
+	<!--  Example how to override an item  -->
+	<!-- 
+	<bean id="de.hybris.platform.jalo.product.Product" class="com.philos.frameit.jalo.FrameitcoreProduct" scope="prototype" />		
+ 	-->
+
+	<!--  
+	 Example how to register and use an AOP aspect 
+     Also see http://static.springframework.org/spring/docs/2.5.x/reference/aop.html	
+     -->
+	
+	<!-- 
+	<bean id="frameitcoreProfBean" class="com.philos.frameit.aop.FrameitcoreProfilingAspect"/>
+	<aop:config proxy-target-class="true">
+  		<aop:aspect id="frameitcoreProfAspect" ref="frameitcoreProfBean" >
+    	  <aop:pointcut id="profiledMethods" 
+	      	expression="execution(* getModificationTime(..))" />  	            
+	   		<aop:around pointcut-ref="profiledMethods" method="profile" />
+  		</aop:aspect>
+	</aop:config>
+	 -->
+
+	
+	<!-- some other examples of a pointcut that matches everything:
+
+    	  <aop:pointcut id="profiledMethods" 
+	      	expression="bean(de.hybris.platform.jalo.user.Customer) &amp;&amp; 
+	      	            !execution(* getPK(..))" />  	            
+	       <aop:pointcut id="profiledMethods" expression="execution(* *(..))" />	
+	  -->
+	
+			
+			
+</beans>

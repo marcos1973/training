@@ -1,0 +1,21 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+
+# Content catalog for CMS contents
+INSERT_UPDATE ContentCatalog;id[unique=true];name[lang=de];name[lang=en];
+;$catalogID;$catalogName;$catalogName;
+
+# Catalog versions for content catalog - set the Online one to active
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;defaultCurrency(isocode);languages(isoCode);
+;$catalogID;Staged;false;EUR;de,en;
+;$catalogID;Online;true;EUR;de,en;
+
+# Base store
+INSERT_UPDATE BaseStore;uid[unique=true];name[lang=de];name[lang=en];catalogs(id)
+;frameitbasestore;Frame It Store;Frame It Store;$productCatalog;
+
+# CMS Site
+INSERT_UPDATE CMSSite;uid[unique=true];name[lang=de];name[lang=en];stores(uid);contentCatalogs(id);urlPatterns;defaultCatalog(id);startingPage(uid,$contentCV);previewURL;defaultPreviewCatalog(id);defaultPreviewCategory(code,,catalogVersion(catalog(id),version));defaultPreviewProduct(code,catalogVersion(catalog(id),version));validComponentTypes(code)
+;frameitsite;Frame It site;Frame It site;frameitbasestore;$catalogID;https?://[^/]*/frameit.*?site=frameitsite.*,https?://[^/]*/frameit((?![\?\&]site=).)*;$productCatalog;;/frameit;$productCatalog;parent1:$productCatalog:Staged;111:$productCatalog:Staged;

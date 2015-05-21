@@ -1,0 +1,8 @@
+# Import the Solr CronJob Trigger configuration
+INSERT_UPDATE Trigger;cronJob(code)[unique=true];second;minute;hour;day;month;year;relative;active;maxAcceptableDelay
+
+# Run the full-solrFacetSearchConfig-cronJob at 3:30 AM every day
+;full-solrFacetSearchConfig-cronJob;0;30;3;-1;-1;-1;false;false;-1
+
+# Run the update-solrFacetSearchConfig-cronJob every 1 minutes
+;update-solrFacetSearchConfig-cronJob;0;1;-1;-1;-1;-1;true;false;-1

@@ -1,0 +1,10 @@
+$productCatalog=Default
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,virtual=true,default=$productCatalog:Staged]
+$approved=approvalStatus(code)[virtual=true,default='approved']
+$unit=unit(code)[virtual=true,default='pieces']
+$ptg=Europe1PriceFactory_PTG(code)[virtual=true,default=frames_PTG]
+
+INSERT_UPDATE PictureFrame;code[unique=true];ean;name[lang=en];width;height;borderWidth;glass(code);supercategories(code,$catalogVersion);picture(code,$catalogVersion);thumbnail(code,$catalogVersion);$ptg;$catalogVersion;$approved;$unit
+;111;111;Test frame 1;100;100;10;STANDARD;cat1;frame1-200x200;frame1-50x50;
+;222;222;Test frame 2;200;200;10;PERSPEX;cat2;frame2-200x200;frame2-50x50;
+;333;333;Test frame 3;30;20;2;STANDARD;cat1,cat2;frame3-200x200;frame3-50x50;

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+  
+-->
+<configuration xmlns="hybris.de/schemas/hmc/generic"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="hybris.de/schemas/hmc/generic hmc.xsd">
+
+
+	<!-- Configuration for extension frameitcore -->
+
+	<explorertree>
+		<group name="picture.frames.group">
+    	    <typeref type="PictureFrame"/>
+	    </group>
+	</explorertree>
+
+	<type name="PictureFrame" mode="append">
+	    <organizer>
+	        <search>
+	            <condition attribute="code"/>
+				<condition attribute="name"/>
+				<condition attribute="catalogVersion"/>
+	        </search>
+	        <result>
+				<listview>
+					<itemlayout>
+						<attribute name="code" width="200"/>
+						<attribute name="name" width="200"/>
+						<attribute name="catalogVersion" width="200"/>
+					</itemlayout>
+				</listview>
+	        </result>
+			<editor>
+				<essentials>
+					<columnlayout>
+						<row><attribute name="code"/></row>
+						<row><attribute name="name"/></row>
+					</columnlayout>
+				</essentials>
+				<tab name="picture.frame.tab1">
+					<section name="picture.frame.tab1.section1">
+						<columnlayout>
+							<row><attribute name="width"/></row>
+							<row><attribute name="height"/></row>
+							<row><attribute name="borderWidth"/></row>
+							<row><attribute name="ean"/></row>
+							<row><attribute name="dimensions"/></row>
+							<row><attribute name="displayArea"/></row>
+						</columnlayout>
+					</section>
+					<section name="picture.frame.tab1.section2">
+						<listlayout>
+							<attribute name="glass" />
+						</listlayout>
+					</section>
+				</tab>
+			</editor>
+	    </organizer>
+	</type>
+
+	<type name="CartSummaryComponent" mode="append">
+	    <organizer>
+	        <search>
+	            <condition attribute="uid"/>
+				<condition attribute="label"/>
+				<condition attribute="catalogVersion"/>
+	        </search>
+	        <result>
+				<listview>
+					<itemlayout>
+						<attribute name="uid" width="200"/>
+						<attribute name="label" width="200"/>
+						<attribute name="catalogVersion" width="200"/>
+					</itemlayout>
+				</listview>
+	        </result>
+			<editor>
+				<essentials>
+					<columnlayout>
+						<row><attribute name="uid"/></row>
+						<row><attribute name="label"/></row>
+					</columnlayout>
+				</essentials>
+				<tab name="cart.summary.tab1">
+					<section name="cart.summary.tab1.section1">
+						<columnlayout>
+							<row><attribute name="link"/></row>
+							<row><attribute name="image"/></row>
+						</columnlayout>
+					</section>
+				</tab>
+			</editor>
+	    </organizer>
+	</type>
+	
+</configuration>

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetCityForecastByZIPResult" type="{http://ws.cdyne.com/WeatherWS/}ForecastReturn" minOccurs="0"/>
+ *         &lt;element name="ZIP" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,38 +27,38 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD).///
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getCityForecastByZIPResult"
+    "zip"
 })
-@XmlRootElement(name = "GetCityForecastByZIPResponse")
-public class GetCityForecastByZIPResponse {
+@XmlRootElement(name = "GetCityWeatherByZIP")
+public class GetCityWeatherByZIP {
 
-    @XmlElement(name = "GetCityForecastByZIPResult")
-    protected ForecastReturn getCityForecastByZIPResult;
+    @XmlElement(name = "ZIP")
+    protected String zip;
 
     /**
-     * Gets the value of the getCityForecastByZIPResult property.
+     * Gets the value of the zip property.
      * 
      * @return
      *     possible object is
-     *     {@link ForecastReturn }
+     *     {@link String }
      *     
      */
-    public ForecastReturn getGetCityForecastByZIPResult() {
-        return getCityForecastByZIPResult;
+    public String getZIP() {
+        return zip;
     }
 
     /**
-     * Sets the value of the getCityForecastByZIPResult property.
+     * Sets the value of the zip property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ForecastReturn }
+     *     {@link String }
      *     
      */
-    public void setGetCityForecastByZIPResult(ForecastReturn value) {
-        this.getCityForecastByZIPResult = value;
+    public void setZIP(String value) {
+        this.zip = value;
     }
 
 }

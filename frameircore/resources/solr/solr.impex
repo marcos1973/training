@@ -1,0 +1,131 @@
+#
+# Import the Solr configuration for the frameit store
+
+# Constants for catalog
+$productCatalog=Default
+$catalogVersions=catalogVersions(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online,virtual=true]
+
+# Solr object IDs/names constants
+$facetSearchConfigName=solrFacetSearchConfig
+$serverConfigName=solrServerConfig
+$indexConfigName=solrIndexConfig
+$searchConfigName=solrSearchConfig
+
+$facetSearchConfigDescription=Frame It Solr Index
+
+# Constant for prefix used in directory names
+$searchIndexNamePrefix=frameit
+
+# Constant for the indexed type (the type solr creates)
+$solrIndexedType=frameitProductType
+
+# language and currency constants
+$indexLanguages=en,de
+$indexCurrencies=EUR
+
+#
+# Setup the Solr server, indexer, and search configs
+#
+
+# Create the solr server configuration - embedded, no clustering
+INSERT_UPDATE SolrServerConfig;name[unique=true];mode(code);embeddedMaster
+;$serverConfigName;embedded;true
+
+# Create the solr indexer configuration - batch size 100, single threaded, two-phase mode
+INSERT_UPDATE SolrIndexConfig;name[unique=true];batchSize;numberOfThreads;indexMode(code);
+;$indexConfigName;100;1;TWO_PHASE;
+
+# Create the faceted search configuration - page size 20.
+INSERT_UPDATE SolrSearchConfig;description[unique=true];pageSize
+;$searchConfigName;20
+
+#
+# Setup the indexed types, their properties, and the update queries
+#
+
+# Declare the indexed type $solrIndexedType (frameitProductType)
+INSERT_UPDATE SolrIndexedType;identifier[unique=true];type(code);variant;
+;$solrIndexedType;PictureFrame;false;
+
+
+# Declare the top level config object - the solr facet search config object - and set the references to the
+# objects it contains
+INSERT_UPDATE SolrFacetSearchConfig;name[unique=true];description;indexNamePrefix;languages(isocode);currencies(isocode);solrServerConfig(name);solrSearchConfig(description);solrIndexConfig(name);solrIndexedTypes(identifier);$catalogVersions
+;$facetSearchConfigName;$facetSearchConfigDescription;$searchIndexNamePrefix;$indexLanguages;$indexCurrencies;$serverConfigName;$searchConfigName;$indexConfigName;$solrIndexedType;
+
+
+# An example of how to define price range set (note the dynamic/document ID &rangeValueRefID).
+# Define price ranges
+INSERT_UPDATE SolrValueRange;&rangeValueRefID;solrValueRangeSet(name)[unique=true];name[unique=true];from;to
+;rangeRefEUR1;solrPriceRangeEUR;       €0-€4.99;  0; 4.99
+;rangeRefEUR2;solrPriceRangeEUR;      €5-€19.99;  5;19.99
+;rangeRefEUR3;solrPriceRangeEUR;     €20-€49.99; 20;49.99
+;rangeRefEUR4;solrPriceRangeEUR;     €50-€99.99; 50;99.99
+;rangeRefEUR5;solrPriceRangeEUR;    €100-€1,000;100;1000
+INSERT_UPDATE SolrValueRangeSet;name[unique=true];qualifier;type;solrValueRanges(&rangeValueRefID)
+;solrPriceRangeEUR;EUR;double;rangeRefEUR1,rangeRefEUR2,rangeRefEUR3,rangeRefEUR4,rangeRefEUR5
+
+
+# Define non-facet properties
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];useForAutocomplete[default=false];fieldValueProvider
+# If the field value provider is empty, the default model field value provider is used - i.e., uses the model like a bean.
+#  solr type         name                type    sortableType curr i18n mlti  a-c   field value provider
+;$solrIndexedType; code                 ;text   ;            ;    ;    ;    ;true ;
+;$solrIndexedType; name                 ;text   ;            ;    ;true;    ;true ;
+;$solrIndexedType; description         	;text   ;            ;    ;true;    ;     ;
+;$solrIndexedType; manufacturerName    	;text   ;            ;    ;    ;    ;     ;
+;$solrIndexedType; ean	           		;text   ;            ;    ;    ;    ;     ;
+;$solrIndexedType; priceValue      		;double ;            ;true;    ;    ;     ;productPriceValueProvider
+#;$solrIndexedType; keywords         	;text   ;            ;    ;true;    ;     ;productKeywordsValueProvider
+
+# Examples - some of the other value providers provided by hybris 
+#;$solrIndexedType; reviewAvgRating        ;double ;    ;     ;true;    ;    ;productReviewAverageRatingValueProvider
+#;$solrIndexedType; url                    ;string ;    ;     ;true;    ;    ;productUrlValueProvider
+#;$solrIndexedType; primaryPromotionCode   ;string ;    ;     ;    ;    ;    ;promotionCodeValueProvider
+#;$solrIndexedType; primaryPromotionBanner ;string ;    ;     ;    ;    ;    ;promotionImageValueProvider
+#;$solrIndexedType; stockLevelStatus  	   ;string ;    ;     ;	   ;    ;    ;productStockLevelStatusValueProvider
+
+# Category fields
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);localized[default=false];multiValue[default=true];fieldValueProvider
+;$solrIndexedType; categoryName     ;string;true;;categoryNameValueProvider
+
+# Category facets
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);multiValue[default=true];facet[default=true];facetType(code);fieldValueProvider;facetDisplayNameProvider
+;$solrIndexedType; allCategories ;string;;;Refine;categoryCodeValueProvider;
+#;$solrIndexedType; categoryPath  ;string;;;Refine;categoryPathValueProvider;
+;$solrIndexedType; category      ;string;;;Refine;categoryCodeValueProvider;categoryFacetDisplayNameProvider
+
+# Other facet properties
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];facet[default=false];facetType(code);priority;fieldValueProvider;facetDisplayNameProvider;customFacetSortProvider;rangeSets(name)
+;$solrIndexedType; glass  		;text  ;    ;     ;    ;		;true ;Refine;4000;;;;
+;$solrIndexedType; price    	;double;	;true ;    ;    	;true ;MultiSelectOr;4000;productPriceValueProvider;;;solrPriceRangeEUR
+
+#;$solrIndexedType; allPromotions    ;string;    ;false;    ;true    ;true ;MultiSelectOr;0;promotionCodeValueProvider;;;
+
+# Create the queries that will be used to extract data for Solr
+INSERT_UPDATE SolrIndexerQuery;solrIndexedType(identifier)[unique=true];identifier[unique=true];type(code);injectCurrentDate[default=true];injectCurrentTime[default=true];injectLastIndexTime[default=true];query
+;$solrIndexedType;$solrIndexedType-fullQuery;full;;;;"
+SELECT {PK} FROM {PictureFrame}
+"
+;$solrIndexedType;$solrIndexedType-updateQuery;update;;;;"
+SELECT {p:PK} FROM {PictureFrame AS p} WHERE ({p:modifiedtime} >= ?lastIndexTime)
+"
+
+# Sort item configuration stuff comes from commerceservices - this example does not include that extension.
+# Define the available sorts
+# INSERT_UPDATE SolrSort;&sortRefID;indexedType(identifier)[unique=true];code[unique=true];name[lang=en];name[lang=de]
+#;sortRef1;$solrIndexedType;relevance;Relevance EN;Relevance DE;
+#;sortRef2;$solrIndexedType;topRated;Top rated EN;Top rated DE;
+#;sortRef3;$solrIndexedType;name-asc;Name (ascending) EN;Name (ascending) DE;
+#;sortRef4;$solrIndexedType;name-desc;Name (descending) EN;Name (descending) DE;
+#;sortRef5;$solrIndexedType;prive-asc;Price (ascending) EN;Price (ascending) DE;
+#;sortRef6;$solrIndexedType;price-desc;Price (descending) EN;Price (descending) DE;
+
+# Define the sort fields
+#INSERT_UPDATE SolrSortField;sort(indexedType(identifier),code)[unique=true];fieldName[unique=true];ascending[unique=true]
+#;$solrIndexedType:relevance;score;false
+#;$solrIndexedType:topRated;reviewAvgRating;false
+#;$solrIndexedType:name-asc;name;true
+#;$solrIndexedType:name-desc;name;false
+#;$solrIndexedType:price-asc;price;true
+#;$solrIndexedType:price-desc;price;false

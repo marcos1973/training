@@ -1,0 +1,9 @@
+$productCatalog=Default
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,virtual=true,default=$productCatalog:Staged]
+$unit=unit(code)[virtual=true,default='pieces']
+$net=net[virtual=true,default=true]
+
+INSERT_UPDATE PriceRow;product(code,$catalogVersion)[unique=true];price;$currency;$catalogVersion;$unit;$net;
+;111;150
+;222;250
+;333;350

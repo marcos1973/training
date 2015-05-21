@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetCityForecastByZIPResult" type="{http://ws.cdyne.com/WeatherWS/}ForecastReturn" minOccurs="0"/>
+ *         &lt;element name="GetWeatherInformationResult" type="{http://ws.cdyne.com/WeatherWS/}ArrayOfWeatherDescription" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,38 +27,38 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD).///
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getCityForecastByZIPResult"
+    "getWeatherInformationResult"
 })
-@XmlRootElement(name = "GetCityForecastByZIPResponse")
-public class GetCityForecastByZIPResponse {
+@XmlRootElement(name = "GetWeatherInformationResponse")
+public class GetWeatherInformationResponse {
 
-    @XmlElement(name = "GetCityForecastByZIPResult")
-    protected ForecastReturn getCityForecastByZIPResult;
+    @XmlElement(name = "GetWeatherInformationResult")
+    protected ArrayOfWeatherDescription getWeatherInformationResult;
 
     /**
-     * Gets the value of the getCityForecastByZIPResult property.
+     * Gets the value of the getWeatherInformationResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ForecastReturn }
+     *     {@link ArrayOfWeatherDescription }
      *     
      */
-    public ForecastReturn getGetCityForecastByZIPResult() {
-        return getCityForecastByZIPResult;
+    public ArrayOfWeatherDescription getGetWeatherInformationResult() {
+        return getWeatherInformationResult;
     }
 
     /**
-     * Sets the value of the getCityForecastByZIPResult property.
+     * Sets the value of the getWeatherInformationResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ForecastReturn }
+     *     {@link ArrayOfWeatherDescription }
      *     
      */
-    public void setGetCityForecastByZIPResult(ForecastReturn value) {
-        this.getCityForecastByZIPResult = value;
+    public void setGetWeatherInformationResult(ArrayOfWeatherDescription value) {
+        this.getWeatherInformationResult = value;
     }
 
 }

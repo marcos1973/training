@@ -1,0 +1,21 @@
+# Discounts
+INSERT_UPDATE Discount;code[unique=true];value;currency(isocode);name[lang=en];name[lang=de]
+;staffDiscount;5;;"5% staff discount";"5% medewerker korting";
+;winterSale;15;;"15% off Winter Sale";15% korting winter"
+
+# Customer discount groups (like user tax groups)
+INSERT_UPDATE UserDiscountGroup;code[unique=true];name[lang=en];name[lang=de]
+;staff_CDG;"Staff Discount customer discount group";"Staff Discount customer discount group";
+
+# The discount - not a global discount
+INSERT_UPDATE DiscountRow;discount(code)[unique=true];ug(code)[unique=true];
+;staffDiscount;staff_CDG;
+
+# Product Discount Classes (like product tax groups)
+INSERT_UPDATE ProductDiscountGroup;code[unique=true];name[lang=en];name[lang=de];
+;winterSale_frames_PDC;"Winter sale product discount class for Frames";"Winter sale product discount class for Frames";
+
+# Global discount - should include date (to - from) headers/data
+INSERT_UPDATE GlobalDiscountRow;discount(code)[unique=true];pg(code)[forceWrite=true];
+;winterSale;winterSale_frames_PDC;
+

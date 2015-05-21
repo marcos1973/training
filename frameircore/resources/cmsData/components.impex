@@ -1,0 +1,45 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Paragraph Element
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;visible;content[lang=de];content[lang=en];
+;;home_page_paragraph1;Text for Home page;true;"<div><h1>Sample paragraph component DE</h1><p>Some content.</p></div>";"<div><h1>Sample paragraph component EN</h1><p>Some content.</p></div>";
+;;category_page_paragraph1;Text for category page;true;"<div><h1>Sample paragraph component DE</h1><p>Some content.</p></div>";"<div><h1>Sample paragraph component EN</h1><p>Some content.</p></div>";
+;;my_account_page_paragraph1;Text for my account page;true;"<div><h1>My Account DE</h1><p>Select an option from the navigation menu.</p></div>";"<div><h1>My Account</h1><p>Select an option from the navigation menu.</p></div>";
+;;order_history_page_paragraph1;Text for order history page;true;"<div><h1>Order History DE</h1><p>Select an order for more information.</p></div>";"<div><h1>Order history</h1><p>Select an order for more information.</p></div>";
+;;order_details_page_paragraph1;Text for order details page;true;"<div><h1>Order Details DE</h1><p>Order details.</p></div>";"<div><h1>Order details</h1><p>Selected order details.</p></div>";
+;;product_page_paragraph1;Text for product page;true;"<div><h1>Product details DE</h1><p>Product details.</p></div>";"<div><h1>Product details</h1><p>Selected product details.</p></div>";
+
+# Create links
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;visible;external;target(code);url;linkName[lang=de];linkName[lang=en]
+;;navigation_link1;Parent Category link;true;true;sameWindow;/category/parent1;DE Parent category;Parent category;
+;;navigation_link2;Home link;true;true;sameWindow;/;DE Home;Home;
+;;navigation_link3;Cart link;true;true;sameWindow;/cart;DE Cart;Cart;
+;;navigation_link4;Login link;true;true;sameWindow;/login;DE Login;Login;
+;;my_account_navigation_link1;My Account link;true;true;sameWindow;/myAccount;DE My Account;My Account;
+;;my_account_navigation_link2;Profile link;true;true;sameWindow;/myAccount/profile;DE Profile;Profile;
+;;my_account_navigation_link3;Address Book link;true;true;sameWindow;/addressBook;DE Address Book;Address Book;
+;;my_account_navigation_link4;Order History link;true;true;sameWindow;/orderHistory;DE Order History;Order History;
+
+# Media for banners
+INSERT_UPDATE Media;code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpg'];altText;$contentCV[unique=true]
+;banner1-200x500;banner1-200x500.png;$siteResource/cmsData/images/banner1-200x500.png;;My banner;
+
+# Create Banners
+INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;visible;headline[lang=de];headline[lang=en];media(code,$contentCV)[lang=de];media(code,$contentCV)[lang=en];urlLink;page(uid,$contentCV);external;content[lang=de];content[lang=en];
+;;banner1;My Banner;true;"DE headline";"EN headline";banner1-200x500;banner1-200x500;/category/parent1;;false;"DE Content";"EN Content";
+
+# Media for header cart component
+INSERT_UPDATE Media;code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/png'];altText;$contentCV[unique=true]
+;shopping-basket-32x32;shopping-basket-32x32.png;$siteResource/cmsData/images/cart.png;Shopping cart;
+
+# Create a header cart component
+INSERT_UPDATE CartSummaryComponent;uid[unique=true];label[lang=en];label[lang=de];link[lang=en];link[lang=de];image(code,$contentCV);$contentCV[unique=true];
+;cart_summary1;Shopping cart;DE Shopping cart;/cart;/cart;shopping-basket-32x32;
+
+# Create a cart side panel component for use during the checkout process
+INSERT_UPDATE CartSidePanelComponent;uid[unique=true];label[lang=en];label[lang=de];image(code,$contentCV);$contentCV[unique=true];
+;cart_side_panel1;Shopping cart;DE Shopping cart;shopping-basket-32x32;

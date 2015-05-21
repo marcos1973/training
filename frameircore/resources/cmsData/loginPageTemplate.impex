@@ -1,0 +1,58 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Page Templates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;active;velocityTemplate;frontendTemplateName
+;;login_page_template;Login Page Template;true;"<div>
+    <table width=""100%"" cellspacing=""0"" style=""margin:0;padding:0;table-layout:fixed;border:none;"">
+        <tbody>
+            <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""cartsummary""/>
+                </td>
+            </tr>
+            <tr>
+                <td width=""69%"" class=""structureViewSection"">
+                   <cockpit code=""main""/>
+                </td>
+                <td width=""29%"" class=""structureViewSection"">
+                   <cockpit code=""banner""/>
+                </td>
+             </tr>
+             <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""footer""/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style=""width:100%; border-top: 2px solid #bbb"" class=""cmsContentEditor"">
+        <cockpit code=""editor""/>
+    </div>
+</div>";loginPageTemplate;
+
+
+# Content Slot Names
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true];
+# The login page template names/positions/keys
+;cartsummary;login_page_template;
+;banner;login_page_template;
+;footer;login_page_template;
+
+# Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV);
+# Banner
+;;login_page_template_banner_CS;Login Page Template 'banner' Slot;true;banner1;
+# Footer
+;;login_page_template_footer_CS;Login Page Template 'footer' Slot;true;navigation_link1,navigation_link2,navigation_link3,navigation_link4;
+
+
+# Bind Content Slots to Page Templates
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true];allowOverwrite;
+# Banner
+;login_page_template_banner_CSFP;;banner;login_page_template;login_page_template_banner_CS;true;
+# Footer
+;login_page_template_footer_CSFP;;footer;login_page_template;login_page_template_footer_CS;true;

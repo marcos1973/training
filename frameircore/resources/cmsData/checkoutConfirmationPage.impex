@@ -1,0 +1,19 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Images
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;;checkoutConfirmationPagePreviewImage-144x90;image/png;checkoutConfirmationPagePreviewImage-144x90.png;jar:/cmsData/images/checkoutConfirmationPagePreviewImage-144x90.png;
+
+# Create checkout confirmation page
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];label;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code);previewImage(code,$contentCV)
+;;checkout_confirmation_page;Checkout confirmation page;Checkout confirmation page;checkout_confirmation_page;checkout_page_template;true;approved;checkoutConfirmationPagePreviewImage-144x90
+
+# The checkout page template names/positions/keys
+# cartsummary
+# banner
+# footer
+

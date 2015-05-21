@@ -1,0 +1,25 @@
+INSERT_UPDATE SerialVoucher;code[unique=true];name[lang=en];description[lang=en];value;currency(isocode);freeShipping;
+;SV1;Serial Voucher 1;10 euro off voucher - just for you;10;EUR;false;
+;SV2;Serial Voucher 2;5% off voucher for you;5;;false;
+;SV3;Serial Voucher 3;10 euro off voucher - order more that 50 euro;10;EUR;false;
+;SV4;Serial Voucher 3;20% off voucher - user has placed more than 3 orders;20;;false;
+
+INSERT_UPDATE OrderRestriction;positive;description[lang=en,unique=true];violationMessage[lang=en];voucher(code);total;currency(isocode);net;valueofgoodsonly;
+;true;Order is worth more than 50 euro;Does not apply!;SV3;50;EUR;true;false;
+
+INSERT_UPDATE RegularCustomerOrderQuantityRestriction;positive;description[lang=en,unique=true];violationMessage[lang=en];voucher(code);orderQuantity;
+;true;User has placed more than 3 orders;Fewer than 3 orders placed;SV4;3
+
+INSERT_UPDATE PromotionVoucher;code[unique=true];name[lang=en];description[lang=en];value;currency(isocode);freeShipping;redemptionQuantityLimit;redemptionQuantityLimitPerUser;
+;PV1;Promotion Voucher 1;5 euro off voucher - usable 3 times per user (12 max uses);5;EUR;false;12;3;
+;PV2;Promotion Voucher 2;10% off voucher - many uses once per user;10;;false;16777216;16777216;
+;PV3;Promotion Voucher 3;10 euro off voucher - once per customer only;10;EUR;false;16777216;1;
+;PV4;Promotion Voucher 4;10% off voucher - for new customers only;10;;false;16777216;1;
+;PV5;Promotion Voucher 5;3 euro off voucher - limited time only;3;EUR;false;16777216;16777216;
+
+INSERT_UPDATE NewCustomerRestriction;positive;description[lang=en,unique=true];violationMessage[lang=en];voucher(code);
+;true;Must be a new customer;Not a new customer;PV4;
+
+INSERT_UPDATE DateRestriction;positive;description[lang=en,unique=true];violationMessage[lang=en];voucher(code);startDate[dateformat='dd/MM/yyyy'];endDate[dateformat='dd/MM/yyyy'];
+;true;Limited time voucher;Outside time restriction;PV5;01/01/2013;01/01/2014;
+

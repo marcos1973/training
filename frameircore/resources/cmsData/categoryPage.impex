@@ -1,0 +1,30 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Create Images
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;;categoryPagePreviewImage-144x90;image/png;categoryPagePreviewImage-144x90.png;jar:/cmsData/images/categoryPagePreviewImage-144x90.png;
+
+# Create homepage
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];label;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code);previewImage(code,$contentCV)
+;;category_page;Category page;Category page;category_page;category_page_template;true;approved;categoryPagePreviewImage-144x90
+
+# Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV);
+;;category_page_main_CS;Category page 'main' Slot;true;category_page_paragraph1;
+
+# Bind Content Slot to Content Page
+INSERT_UPDATE ContentSlotForPage;uid[unique=true];$contentCV[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true];
+;category_page_main_CSFP;;main;category_page;category_page_main_CS;
+
+
+# The category page template names/positions/keys
+# cartsummary
+# navigation
+# main
+# banner
+# footer
+

@@ -1,0 +1,31 @@
+# The workflow template - the top level workflow item, owned by admin, visible to anyone in the admingroup
+INSERT_UPDATE WorkflowTemplate;code[unique=true];name[lang=en];name[lang=de];owner(uid);description[lang=de];description[lang=en];activationscript;visibleForPrincipals(uid);
+;customer_review_approval_workflow;New review workflow;New review workflow;admin;;;;admingroup;
+
+# Start and end states 
+INSERT_UPDATE WorkflowActionTemplate;code[unique=true];name[lang=de];name[lang=en];description[lang=de];description[lang=en];principalAssigned(uid);workflow(code)[unique=true];sendEmail;emailAddress;rendererTemplate(code);actionType(code)
+;review_approval_start;Review approval;Review approval;;;admingroup;customer_review_approval_workflow;false;;;start
+;review_approval_end;End;End;;;admingroup;customer_review_approval_workflow;false;;;end
+
+# Automatic workflow actions/jobs - with reference to the implementing bean ID.
+INSERT_UPDATE AutomatedWorkflowActionTemplate;code[unique=true];name[lang=de];name[lang=en];description[lang=de];description[lang=en];principalAssigned(uid);workflow(code)[unique=true];sendEmail;emailAddress;rendererTemplate(code);actionType(code);jobHandler
+;review_approved_job;Review approved;Review approved;;;admingroup;customer_review_approval_workflow;false;;;normal;approveReviewActionJob
+;review_rejected_job;Review rejected;Review rejected;;;admingroup;customer_review_approval_workflow;false;;;normal;rejectReviewActionJob
+ 
+# Workflow decisions
+INSERT_UPDATE WorkflowDecisionTemplate;code[unique=true];name[lang=de];name[lang=en];actionTemplate(code);description[allownull=true];
+# The decisions available when the review is in the start state - approve or reject review
+;approve_review_decision;Approve review;Approve review;review_approval_start;;
+;reject_review_decision;Reject review;Reject review;review_approval_start;;
+# The decisions available from the automated workflow action beans - each only has one decision available
+;review_approved_decision;Review approved;Review approved;review_approved_job;;
+;review_rejected_decision;Review rejected;Review rejected;review_rejected_job;;
+
+# Make the relations between the workflow decisions and the workflow actions (states and automatic jobs)
+INSERT_UPDATE WorkflowActionTemplateLinkTemplateRelation;source(code)[unique=true];target(code)[unique=true];andConnectionTemplate;qualifier;
+# After the approve-review or reject-review decision, start the review approved job or review rejected job
+;approve_review_decision;review_approved_job;false;WorkflowActionTemplateLinkTemplateRelation;
+;reject_review_decision;review_rejected_job;false;WorkflowActionTemplateLinkTemplateRelation;
+# After the review approved or rejected decision is returned from the jobs, we move to the end state.
+;review_approved_decision;review_approval_end;false;WorkflowActionTemplateLinkTemplateRelation;
+;review_rejected_decision;review_approval_end;false;WorkflowActionTemplateLinkTemplateRelation;

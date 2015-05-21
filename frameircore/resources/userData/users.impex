@@ -1,0 +1,11 @@
+INSERT_UPDATE Customer;uid[unique=true];customerID[unique=true];name;description;Europe1PriceFactory_UTG(code);Europe1PriceFactory_UDG(code);sessionLanguage(isocode);sessionCurrency(isocode);password
+;test@test.com;Test User;Test User;This is a test customer;ireland_UTG;;en;EUR;test;
+;employee@test.com;Staff Customer account;Staff customer account;This is a customer account for a staff member;ireland_UTG;staff_CDG;en;EUR;1234;
+
+INSERT_UPDATE Address;owner(Customer.uid)[unique=true];streetname[unique=true];streetnumber[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department
+;test@test.com;Test Street;100;1234AB;false;Test Town;ie;true;true;true;false;Test;User;test@test.com;MALE;;0035311234567;
+;employee@test.com;Test Street;100;1234AB;false;Test Town;ie;true;true;true;false;Test;User;test@test.com;MALE;;0035311234567;
+
+# Update the anonymous user to be in the Irish tax group (we might create multiple anonymous users etc.. but for now, this is ok) 
+UPDATE Customer;uid[unique=true];Europe1PriceFactory_UTG(code);Europe1PriceFactory_UDG(code);
+;anonymous;ireland_UTG;;

@@ -1,0 +1,8 @@
+# Create the service layer job with a reference to our Spring bean (processIncomingOrderUpdatesJob) that
+# implements the business logic for the job
+INSERT_UPDATE ServicelayerJob;code[unique=true];
+;processIncomingOrderUpdatesJob;processIncomingOrderUpdatesJob;
+
+# Create the cronjob itself 
+INSERT_UPDATE ProcessIncomingOrderUpdatesCronJob; code[unique=true];job(code);sourceFolder;sessionLanguage(isocode)
+;processIncomingOrderUpdatesCronJob;processIncomingOrderUpdatesJob;/home/eoin/incomingOrderUpdates;en

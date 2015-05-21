@@ -1,0 +1,11 @@
+$productCatalog=Default
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,virtual=true,default=$productCatalog:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+INSERT_UPDATE Media;code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpg'];altText;$catalogVersion
+;frame1-200x200;frame1-200x200.png;$siteResource/test/pictureFrameData/images/frame1-200x200.png;Picture Frame 1;
+;frame1-50x50;frame1-50x50.png;$siteResource/test/pictureFrameData/images/frame1-50x50.png;Picture Frame 1;
+;frame2-200x200;frame2-200x200.png;$siteResource/test/pictureFrameData/images/frame2-200x200.png;Picture Frame 2;
+;frame2-50x50;frame2-50x50.png;$siteResource/test/pictureFrameData/images/frame2-50x50.png;Picture Frame 2;
+;frame3-200x200;frame3-200x200.png;$siteResource/test/pictureFrameData/images/frame3-200x200.png;Picture Frame 3;
+;frame3-50x50;frame3-50x50.png;$siteResource/test/pictureFrameData/images/frame3-50x50.png;Picture Frame 3;

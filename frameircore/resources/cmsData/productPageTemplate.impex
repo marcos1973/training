@@ -1,0 +1,71 @@
+$catalogID=frameit_content
+$catalogName=Frame It Content Catalog
+$productCatalog=Default
+$contentCV=catalogVersion(catalog(id[default=$catalogID]),version[default=Staged])[default=$catalogID:Staged]
+$siteResource=jar:com.philos.frameit.systemsetup.FrameitCoreSystemSetup&
+
+# Page Templates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;active;velocityTemplate;frontendTemplateName
+;;product_page_template;Product Page Template;true;"<div>
+    <table width=""100%"" cellspacing=""0"" style=""margin:0;padding:0;table-layout:fixed;border:none;"">
+        <tbody>
+            <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""cartsummary""/>
+                </td>
+            </tr>
+            <tr>
+                <td width=""29%"" class=""structureViewSection"">
+                   <cockpit code=""navigation""/>
+                </td>
+                <td width=""40%"" class=""structureViewSection"">
+                   <cockpit code=""main""/>
+                </td>
+                <td width=""29%"" class=""structureViewSection"">
+                   <cockpit code=""banner""/>
+                </td>
+             </tr>
+             <tr>
+                <td colspan=""3"" width=""29%"" class=""structureViewSection"">
+                    <cockpit code=""footer""/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style=""width:100%; border-top: 2px solid #bbb"" class=""cmsContentEditor"">
+        <cockpit code=""editor""/>
+    </div>
+</div>";productPageTemplate;
+
+
+# Content Slot Names
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true];
+# The product page template names/positions/keys
+;cartsummary;product_page_template;
+;navigation;product_page_template;
+;main;product_page_template;
+;banner;product_page_template;
+;footer;product_page_template;
+
+# Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV);
+# Cart summary
+;;product_page_template_cartsummary_CS;Product Page Template 'cartsummary' Slot;true;cart_summary1;
+# Navigation
+;;product_page_template_navigation_CS;Product page 'navigation' Slot;true;navigation_link1,navigation_link2,navigation_link3,navigation_link4;
+# Banner
+;;product_page_template_banner_CS;Product page 'banner' Slot;true;banner1;
+# Footer
+;;product_page_template_footer_CS;Product page 'footer' Slot;true;navigation_link1,navigation_link2,navigation_link3,navigation_link4;
+
+
+# Bind Content Slots to Page Templates
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true];allowOverwrite;
+# Cart summary
+;product_page_template_cartsummary_CSFP;;cartsummary;product_page_template;product_page_template_cartsummary_CS;true;
+# Navigation
+;product_page_template_navigation_CSFP;;navigation;product_page_template;product_page_template_navigation_CS;true;
+# Banner
+;product_page_template_banner_CSFP;;banner;product_page_template;product_page_template_banner_CS;true;
+# Footer
+;product_page_template_footer_CSFP;;footer;product_page_template;product_page_template_footer_CS;true;

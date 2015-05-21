@@ -1,0 +1,5 @@
+# Create the trigger for our processIncomingOrderUpdatesCronJob
+INSERT_UPDATE Trigger; cronJob(code)[unique=true];cronExpression
+# CronJob;                          Second Minute Hour Day-in-Month Day-of-week Month Year
+#                                   At 2.30am, any day-in-month, every day, every month, every year.
+;processIncomingOrderUpdatesCronJob;0 30 2 ? * * *

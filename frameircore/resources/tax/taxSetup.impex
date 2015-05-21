@@ -1,0 +1,22 @@
+# Tax rates
+INSERT_UPDATE Tax;code[unique=true];value;currency(isocode);name[lang=en];name[lang=de]
+;tenPercent;10;;"10% tax rate";"10% belasting";
+;fifteenPercent;15;;"15% tax rate";15% belasting"
+;twentyPercent;20;;"20% tax rate";"20% belasting";
+;twentyFivePercent;25;;"25% tax rate";"25% belasting"; 
+
+# User tax groups
+INSERT_UPDATE UserTaxGroup;code[unique=true];name[lang=en];name[lang=de];
+;ireland_UTG;"Frame It - Irish users";"Irland uzers";
+;germany_UTG;"Frame It - German users";"Deutsche uzers"; 
+
+INSERT_UPDATE ProductTaxGroup;code[unique=true];name[lang=en];name[lang=de]
+;frames_PTG;"Picture Frames";"Beeld Vrames";
+;electronicFrames_PTG;"Electronic photo frames";"Electronische foto vrames"
+
+INSERT_UPDATE TaxRow;tax(code)[unique=true];ug(code)[unique=true];pg(code)[unique=true];
+;tenPercent;ireland_UTG;frames_PTG;
+;tenPercent;germany_UTG;frames_PTG;
+;twentyPercent;ireland_UTG;electronicFrames_PTG;
+;twentyFivePercent;germany_UTG;electronicFrames_PTG; 
+

@@ -1,0 +1,42 @@
+INSERT_UPDATE EmailTemplate;code[unique=true];subject[lang=en];body[lang=en];
+;review_approved_email_template;"Your review of '$product.name' has been approved";"
+<div>
+	<h2>Review approved</h2>
+	<hr/>
+	<span>Dear #if($user.name)$user.name#else$user.uid#end,</span><br/>
+	<br/>Thank you for your review.<br/>
+	<br/>Your review has been approved. <br/>
+	<br/>
+</div>
+<div>
+	<h3>Review</h3>
+	<h4>$review.headline</h4>
+	<span>$review.rating stars</span><br/>
+	<span>$review.comment</span><br/>
+	<br/><br/>
+	<br/>Click <a href='$url'>here</a> to see the review on our website.<br/>
+	<br/><br/><br/>
+	<br/>In case of questions, please contact us.<br/>
+	<br/>Frame It
+	<br/>Phone: 012345678<br/><br/><br/>
+	<br/>
+</div>";
+
+;review_rejected_email_template;"We're sorry, your review of '$product.name' has been rejected";"
+<div>
+	<h2>Review rejected</h2>
+	<hr/>
+	<span>Dear #if($user.name)$user.name#else$user.uid#end,</span><br/>
+	<br/>Thank you for your review.<br/>
+	<br/>Unfortunately, the moderator has rejected your review. <br/>
+	<br/>
+</div>
+<div>
+	<br/>Please click <a href='$reviewGuidelinesUrl'>here</a> to see our review guidelines.<br/>
+	<br/><br/><br/>
+	<br/>In case of questions, please contact us.<br/>
+	<br/>Frame It
+	<br/>Phone: 012345678<br/>
+	<br/>Email: info@frameit.test.com<br/><br/><br/>
+	<br/>
+</div>";
