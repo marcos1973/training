@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD).///
+@XmlAccessorType(XmlAccessType.FIELD).///lll
 @XmlType(name = "", propOrder = {
     "getCityForecastByZIPResult"
 })
