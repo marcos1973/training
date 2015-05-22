@@ -57,7 +57,7 @@ public class GetCityForecastByZIPResponse {
      *     {@link ForecastReturn }
      *     
      */
-    public void setGetCityForecastByZIPResult(ForecastReturn value) {
+    public void setGetCityForecastByZIPResult(ForecastReturn values) {
         this.getCityForecastByZIPResult = value;
     }
 
